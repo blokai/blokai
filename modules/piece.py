@@ -477,5 +477,13 @@ class BagOfPieces(list):
         
         list.__init__(self, self.pieces)
 
+
+    def selectPiece(self, piece_name) :
+        for piece in self.pieces :
+            if piece.name == piece_name :
+                return piece
+        print('no piece found')
+        return None
+
 # Example
 # bag = BagOfPieces(color = 'blue', player = 0)
