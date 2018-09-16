@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from itertools import chain
-from itertools import compress
+from itertools import chain, compress
 from collections import OrderedDict
 
 '''

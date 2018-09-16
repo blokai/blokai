@@ -5,39 +5,52 @@ from itertools import chain, compress
 ######################################################################
 # Possible positions of pieces relative to a corner located at (0,0) #
 ######################################################################
+# This list of positions is generated only once
+
 ##
 # Duplicates in elements
 ##
 # https://stackoverflow.com/questions/1541797/how-do-i-check-if-there-are-duplicates-in-a-flat-list       
 def no_dup(my_list):
     return(len(my_list) == len(set(my_list)))
-
+# Examples:
+# no_dup([3,1,2]) == True
+# no_dup([2,3,2,2,3,1]) == False
 
 # https://stackoverflow.com/questions/18665873/filtering-a-list-based-on-a-list-of-booleans
-# Remove polyonimo taking 2 times the same value
+# Remove abnormal polyominos from a list of polyominos
+# (an abnormal polyominos is for example: [(0,0),(0,1),(0,2),(0,0)]) because
+# it takes (0,0) two times)
 def remove_dup(my_list):
     return(list(compress(my_list, [no_dup(i) for i in my_list])))
+# remove_dup([[(0,0),(0,1),(0,2),(0,0)]]) == []
+# remove_dup([[(0,0),(0,1),(0,2),(0,0)], [(-1,0),(0,0),(1,0)]]) == [[(-1,0),(0,0),(1,0)]]
 
 ##
 # Duplicates in the list
 ##
+# Remove duplicate polyominos
 def remove_dup2(lst):
     # https://stackoverflow.com/questions/480214/how-do-you-remove-duplicates-from-a-list-whilst-preserving-order
     tple = [tuple(i) for i in lst]
     seen = set()
     seen_add = seen.add
     return [list(x) for x in tple if not (x in seen or seen_add(x))]
+# remove_dup2([[(-1,0),(0,0),(1,0)], [(-1,0),(0,0),(1,0)]]) == [[(-1, 0), (0, 0), (1, 0)]]
 
 ##
 # Impossible positions
 ##
+# Recall that corner is located at (0,0) in this section.
+#
+#
 # Impossible positions from time = 0 in the classic game (begin in the corner)
 # Impossible positions from time = 1 in the 'begin at the middle' game
 def is_valid_element(poly):
     return(not ((((-1, 0) in poly) and ((1, 0) in poly)) or (((0, -1) in poly) and ((0, 1) in poly))))
 
 # poly = [(0, -1), (0, 0), (0, 1)]
-# is_valid_element(poly)
+# is_valid_element(poly) # not valid, because (0, -1) or (0, 1) is filled with an already existing element
 
 ##
 # Main function
@@ -125,17 +138,18 @@ def possible_positions_pieces_as_a_dict(max_rank, remove_impossible = True):
 # # Without impossible pieces: 1, 5, 21, 81, 309
 # possible_positions_pieces_as_a_dict(3, remove_impossible = False)
 
-
 colors = ['b', 'y', 'r', 'g']
 max_rank = 5
 possible_positions_before_constraints = dict()
 for color in colors:
     possible_positions_before_constraints[color] = possible_positions_pieces_as_a_dict(max_rank)
 
-
 possible_positions_before_constraints['b'].pop('Z5', None)         
 # possible_positions_before_constraints evoluate based on pieces used...
 # BagOfPieces: only the names of the pieces in text.
+
+###############################################################################
+# Following code needs update.
 
 ###############
 # Class Board #
